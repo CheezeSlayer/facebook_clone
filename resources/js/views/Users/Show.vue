@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center" v-if="status.user === 'success' && user">
         <div class="relative mb-8">
             <div class="w-100 h-64 overflow-hidden z-10">
                 <img src="/storage/img/stmarks.jpg" alt="user background image" class="object-cover w-full">
@@ -12,15 +12,37 @@
                 <p class="text-2xl text-gray-100 ml-4 ">{{ user.data.attributes.name }}</p>
             </div>
 
+            <div class="absolute flex items-center  bottom-0 right-0 mb-4 mr-12 z-20">
+                <button v-if="friendButtonText && friendButtonText != 'Accept'" 
+                    class="py-1 px-3 bg-gray-400 rounded"
+                    @click="$store.dispatch('sendFriendRequest', $route.params.userId)">
+                    {{ friendButtonText }}
+                </button>
+                <button v-if="friendButtonText && friendButtonText == 'Accept'" 
+                    class="py-1 px-3 bg-blue-500 rounded mr-2"
+                    @click="$store.dispatch('acceptFriendRequest', $route.params.userId)">
+                    Accept
+                </button>
+                <button v-if="friendButtonText && friendButtonText == 'Accept'" 
+                    class="py-1 px-3 bg-gray-400 rounded"
+                    @click="$store.dispatch('ignoreFriendRequest', $route.params.userId)">
+                    Ignore
+                </button>
+            </div>
+
         </div>
-            <p v-if="loading">Loading posts...</p>
+            <div v-if="status.posts === 'loading'">Loading posts...</div>
+
+            <div v-else-if="posts.length < 1">No posts found.  Get started.</div>
+
             <Post v-else v-for="post in posts.data" :key="post.data.post_id" :post="post"></Post>
-            <p v-if="! postLoading && posts.data.length < 1">No posts found.  Get started.</p>
     </div>
 </template>
 
 <script>
 import Post from "../../components/Post";
+import { mapGetters } from 'vuex';
+
 export default {
     name: "Show",
 
@@ -28,38 +50,18 @@ export default {
         Post,
     },
 
-    data: () => {
-        return {
-            user: null,
-            posts: null,
-            userLoading: true,
-            postLoading: true,
-
-        }
+    mounted() {
+        this.$store.dispatch('fetchUser', this.$route.params.userId);
+        this.$store.dispatch('fetchUserPosts', this.$route.params.userId);
     },
 
-    mounted() {
-        axios.get('/api/users/' + this.$route.params.userId)
-            .then(res => {
-                this.user = res.data;
-            })
-            .catch(error => {
-                console.log('Unable to fetch the user from server.')
-            })
-            .finally(() => {
-                this.userLoading = false;
-            });
-
-        axios.get('/api/users/' + this.$route.params.userId + '/posts')
-            .then(res => {
-                this.posts = res.data;
-            })
-            .catch(err => {
-                console.log('Unable to fetch posts');    
-            })
-            .finally(() => {
-                this.postLoading = false;
-            })
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            posts: 'posts',
+            status: 'status',
+            friendButtonText: 'friendButtonText',
+        }),
     }
 
 }

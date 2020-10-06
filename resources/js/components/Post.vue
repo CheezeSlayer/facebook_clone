@@ -32,7 +32,7 @@
                     1.9-1.5 3.7-6.5 3.8-6.7v-.3c-.1-.5 0-1 .1-1.2.2 0 .8.1 1.2.6.4.6.4 1.6-.1 3-.7 2.1-.7 3.2-.2 
                     3.7.3.2.6.3.9.2.3-.1.5-.1.7-.1h.1c1.3-.3 3.6-.5 4.4.3.7.6.2 1.4.1 1.5-.2.2-.1.5.1.7 0 0 .4.4.5 1 0 .3-.2.6-.5 1z"/>
                 </svg>
-                <p>Jame Smith and 137 others</p>
+                <p>{{ post.data.attributes.likes.like_count }} likes</p>
             </div>
 
             <div>
@@ -42,7 +42,9 @@
 
 
         <div class="flex justify-between border-1 border-gray-400 m-4">
-            <button class="flex justify-center py-2 rounded-lg text-sm text-gray-=700 wifull hover:bg-gray-200 w-full">
+            <button class="flex justify-center py-2 rounded-lg text-sm w-full focus:outline-none"
+            :class="[post.data.attributes.likes.user_likes_post ? 'bg-blue-600 text-white' : '']"
+            @click="$store.dispatch('likePost', { postId: post.data.post_id, postKey: $vnode.key })">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5">
                     <path d="M20.8 15.6c.4-.5.6-1.1.6-1.7 0-.6-.3-1.1-.5-1.4.3-.7.4-1.7-.5-2.6-.7-.6-1.8-.9-3.4-.8-1.1.1-2 
                     .3-2.1.3-.2 0-.4.1-.7.1 0-.3 0-.9.5-2.4.6-1.8.6-3.1-.1-4.1-.7-1-1.8-1-2.1-1-.3 0-.6.1-.8.4-.5.5-.4 
@@ -56,7 +58,7 @@
                 </svg>
                 <p class="ml-2">Like</p>    
             </button>
-            <button class="flex justify-center py-2 rounded-lg text-sm text-gray-700 wifull hover:bg-gray-200 w-full">
+            <button class="flex justify-center py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-200 w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5">
                     <path d="M20.3 2H3.7C2 2 .6 3.4.6 5.2v10.1c0 1.7 1.4 3.1 3.1 3.1V23l6.6-4.6h9.9c1.7 0 3.1-1.4 
                     3.1-3.1V5.2c.1-1.8-1.3-3.2-3-3.2zm1.8 13.3c0 1-.8 1.8-1.8 1.8H9.9L5 20.4V17H3.7c-1 0-1.8-.8-1.8-1.8v-10c0-1 
