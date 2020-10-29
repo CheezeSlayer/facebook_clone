@@ -33,7 +33,7 @@
                 </svg>
             </router-link>
             <router-link :to="'/users/' + authUser.data.user_id" class="px-6 border-b-2 border-white h-full flex items-center">
-                <img :src="'../storage/img/profile.JPG'" alt="profile image for user" class="w-8 h-8 object-cover rounded-full">
+                <img :src="authUser.data.attributes.profile_image.data.attributes.path" alt="profile image for user" class="w-8 h-8 object-cover rounded-full">
             </router-link>
             <router-link to="/" class="px-6 border-b-2 border-white h-full flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="fill-current w-5 h-5">

@@ -51,6 +51,7 @@ const actions = {
             .then(res => {
                 commit('pushPost', res.data);
                 commit('updateMessage', '');
+                commit('setPostsStatus', 'success');
             })
             .catch(err => {
             });
